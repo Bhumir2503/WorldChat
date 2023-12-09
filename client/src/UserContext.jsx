@@ -4,8 +4,8 @@ import { createContext, useEffect, useState } from "react";
 export const UserContext = createContext({});
 
 const UserContextProvider = ({ children }) => {
-    const [username, setUsername] = useState(null);
-    const [id, setId] = useState(null);
+    const [username, setUsername] = useState('');
+    const [id, setId] = useState('');
 
 
     useEffect(() => {
@@ -17,8 +17,10 @@ const UserContextProvider = ({ children }) => {
     
           if (response.ok) {
             const data = await response.json();
-            setUsername(data.username);
-            setId(data.id);
+            if (data) {
+              setUsername(data.username);
+              setId(data.id);
+          }
           }
         };
 

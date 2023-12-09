@@ -1,0 +1,32 @@
+
+.chat-container {
+    display: flex;
+    height: 100vh;
+    background-color: #282c34;
+    color: white
+}
+  
+  .users {
+    flex: 1;
+    border-right: 1px solid #ccc;
+    padding: 10px;
+    overflow-y: auto;
+  }
+  
+  .chat-area {
+    flex: 2;
+    padding: 10px;
+    overflow-y: auto;
+  }
+
+  .profile-picture {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+  }
+
+  .dropdown-button{
+    margin-right: 50px;
+  }
+
+

@@ -3,8 +3,11 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const jwt = require('jsonwebtoken');
 const User = require('./models/User');
+var bcrypt = require('bcryptjs');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+var bcrypt = require('bcryptjs');
+const bcryptSalt = bcrypt.genSaltSync(10);
 const serverUrl = "http://localhost";
 dotenv.config()
 mongoose.connect(process.env.MONGO_URI)
@@ -40,12 +43,46 @@ app.get('/profile', (req, res) => {
 
 
 
+//login a user
+app.post("/login", async (req, res) => {
+    const {username, password} = req.body;
+    try {
+      const user = await User.findOne({username});
+      if (!user) {
+        return res.status(400).json({ error: 'Username not found' });
+      }else{
+        const match = await bcrypt.compare(password, user.password);
+        if (!match) {
+          return res.status(400).json({ error: 'Wrong password' });
+        }else{
+          jwt.sign({userId: user._id,username}, process.env.JWT_SECRET, (err, token) => {
+            if(err){
+              console.log(err);
+              return res.status(500).json({ error: 'Error signing the token' });
+            }
+            res.cookie("token", token, {sameSite:'none', secure:true}).status(201).json({
+              id: user._id,
+            })
+          });
+        }
+      }
+    }
+    catch (err) {
+      console.log(err);
+      return res.status(500).json({ error: 'Server error' });
+    }
+});
+
+
+
 
 //Register a new user
 app.post("/register", async (req, res) => {
     const {username, email, password} = req.body;
+    
     try {
-      const createdUser = await User.create({username, email, password});
+      const hashedPassword = await bcrypt.hash(password, bcryptSalt);
+      const createdUser = await User.create({username, email, password:hashedPassword});
       jwt.sign({userId: createdUser._id,username}, process.env.JWT_SECRET, (err, token) => {
         if(err){
           console.log(err);

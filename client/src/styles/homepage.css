@@ -1,0 +1,62 @@
+
+.LandingPage {
+    display: flex;
+    justify-content: space-between;
+
+    flex-direction: column;
+}
+
+.LandingPage div.content {
+    display: flex;
+    justify-content: space-between;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.LandingPage div.content div {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+
+.LandingPage div.content div h2 {
+    font-size: 50px;
+}
+
+.LandingPage div.content div p {
+    font-size: 20px;
+}
+
+.LandingPage div.content img, .LandingPage div.content div {
+    width: 45%;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #1e90ff;
+    color: #fff;
+}
+
+nav h1 {
+    margin: 0;
+}
+
+nav div {
+    display: flex;
+    gap: 20px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 20px;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
