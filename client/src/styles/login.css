@@ -1,0 +1,70 @@
+.LoginForm{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .LoginForm Form{
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #333;
+  }
+  
+  .LoginForm h1{
+    text-align: center;
+    color: white;
+  }
+
+  .LoginForm input {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #282c34;
+    color: white;
+  }
+  
+  .LoginForm button {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .LoginForm button:hover {
+    background-color: #45a049;
+  }
+
+  .LoginForm__register{
+    margin-top:15px;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+
+
+
+  .LoginForm__text {
+    display: inline; /* Add this */
+    font-size: 16px;
+    margin-right: 10px; /* Change margin-bottom to margin-right */
+  }
+  
+  .LoginForm__link {
+    display: inline; /* Add this */
+    color: #007BFF;
+    text-decoration: none;
+    font-weight: 700;
+  }
+
+  .LoginForm__link:hover{
+    text-decoration: underline;
+  }
