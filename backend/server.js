@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const User = require('./models/User');
 var bcrypt = require('bcryptjs');
 const cors = require('cors');
+const ws = require('ws');
 const cookieParser = require('cookie-parser');
 var bcrypt = require('bcryptjs');
 const bcryptSalt = bcrypt.genSaltSync(10);
@@ -22,9 +23,7 @@ app.use(cors({
   origin: 'http://localhost:5173', // replace with the origin of your client
   credentials: true,
 }));
-app.listen(process.env.PORT, () => {
-    console.log('listening for requests on port', process.env.PORT)
-})
+
 
 
 //keep user logged in
@@ -45,32 +44,23 @@ app.get('/profile', (req, res) => {
 
 //login a user
 app.post("/login", async (req, res) => {
-    const {username, password} = req.body;
-    try {
-      const user = await User.findOne({username});
-      if (!user) {
-        return res.status(400).json({ error: 'Username not found' });
-      }else{
-        const match = await bcrypt.compare(password, user.password);
-        if (!match) {
-          return res.status(400).json({ error: 'Wrong password' });
-        }else{
-          jwt.sign({userId: user._id,username}, process.env.JWT_SECRET, (err, token) => {
-            if(err){
-              console.log(err);
-              return res.status(500).json({ error: 'Error signing the token' });
-            }
-            res.cookie("token", token, {sameSite:'none', secure:true}).status(201).json({
-              id: user._id,
-            })
-          });
-        }
-      }
+  const {username, password} = req.body;
+  const user = await User.findOne({username});
+  if (!user) {
+    return res.status(400).json({ error: 'Username not found' });
+  }
+  else{
+    const match = bcrypt.compareSync(password, user.password);
+    if (!match) {
+      return res.status(400).json({ error: 'Wrong password' });
+    }else{
+      jwt.sign({userId: user._id,username}, process.env.JWT_SECRET, (err, token) => {
+        res.cookie("token", token, {sameSite:'none', secure:true}).status(201).json({
+          id: user._id,
+        })
+      });
     }
-    catch (err) {
-      console.log(err);
-      return res.status(500).json({ error: 'Server error' });
-    }
+  }
 });
 
 
@@ -84,10 +74,6 @@ app.post("/register", async (req, res) => {
       const hashedPassword = await bcrypt.hash(password, bcryptSalt);
       const createdUser = await User.create({username, email, password:hashedPassword});
       jwt.sign({userId: createdUser._id,username}, process.env.JWT_SECRET, (err, token) => {
-        if(err){
-          console.log(err);
-          return res.status(500).json({ error: 'Error signing the token' });
-        }
         res.cookie("token", token, {sameSite:'none', secure:true}).status(201).json({
           id: createdUser._id,
         })
@@ -100,4 +86,16 @@ app.post("/register", async (req, res) => {
       console.log(err);
       return res.status(500).json({ error: 'Server error' });
     }
+});
+
+
+
+const server = app.listen(process.env.PORT, () => {
+  console.log('listening for requests on port', process.env.PORT)
+})
+
+
+const wss = new ws.WebSocketServer({ server });
+wss.on('connection', (connection, req) => {
+  console.log(req.header)
 });

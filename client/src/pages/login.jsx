@@ -10,6 +10,10 @@ function Login() {
   const [password, setPassword] = useState('');
   const {setUsername:setLoggedInUsername, setId} = useContext(UserContext);
 
+
+
+
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     const response = await fetch(serverUrl.concat('/login'), {
@@ -30,6 +34,7 @@ function Login() {
       const data = await response.json(); // convert response to JSON
       setLoggedInUsername(username);
       setId(data.id) // access id from data, not response
+
     } 
     else {
       const data = await response.json();

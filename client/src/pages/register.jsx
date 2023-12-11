@@ -11,7 +11,7 @@ function Register() {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const {setUsername:setLoggedInUsername, setId} = useContext(UserContext);
-  const [isLoginOrRegister, setIsLoginOrRegister] = useState("");
+
 
 
   const handleSubmit = async (e) => {
@@ -37,9 +37,11 @@ function Register() {
     if (response.ok) {
       // handle successful registration
       console.log("Registration successful!")
+
       const data = await response.json(); // convert response to JSON
       setLoggedInUsername(username);
       setId(data.id) // access id from data, not response
+
     } 
     else {
       const data = await response.json();

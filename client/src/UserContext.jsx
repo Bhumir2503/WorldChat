@@ -20,7 +20,11 @@ const UserContextProvider = ({ children }) => {
             if (data) {
               setUsername(data.username);
               setId(data.id);
-          }
+            }
+            else {
+              setUsername('');
+              setId('');
+            }
           }
         };
 

@@ -10,7 +10,7 @@ export default function AppRoutes() {
     const {UserContext} = UserContextObject;
     const {username, id} = useContext(UserContext);
 
-    if (username && id) {
+    if (username) {
         return(
             <Chat />
         )
@@ -22,6 +22,7 @@ export default function AppRoutes() {
                 <Route path="/" element={<Homepage />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/chat" element={<Chat />} />
             </Routes>
         </Router>
     )
