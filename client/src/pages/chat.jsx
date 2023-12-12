@@ -9,6 +9,7 @@ export default function Chat() {
   const {UserContext} = UserContextObject;
   const {username, id, setUsername, setId} = useContext(UserContext);
 
+  const [onlineUsers, setOnlineUsers] = useState({});
 
 
   const sendMessage = event => {
@@ -20,14 +21,6 @@ export default function Chat() {
 
 
 
-
-
-
-
-
-
-
-
   useEffect(() => {
     const websocket = new WebSocket('ws://localhost:3000');
     setWs(websocket);
@@ -35,8 +28,23 @@ export default function Chat() {
   }, []);
 
 
+  function showOnlinePeople(peopleArray){
+
+    const people = {}
+    peopleArray.forEach(({userId, username}) => {
+      people[userId] = username;
+    
+    })
+    setOnlineUsers(people);
+  }
+
+
   function handleMessage(e) {
-    console.log("Message received: ", e.data);
+
+    const message = JSON.parse(e.data);
+    if('online' in message) {
+      showOnlinePeople(message.online);
+    }
   }
 
   const handleSignOut = () => {
@@ -48,25 +56,22 @@ export default function Chat() {
   return (
     <div className='Chat'>
       <div className="chat-container">
-      <div className="users">
-      <h2>{username}</h2>
-      {/* List of users here */}
-      {username && (
-        <div className="currentUser">
-          <button onClick={handleSignOut}>Sign Out</button> 
+        <div className="users">
+          <h2>{username}</h2>
+          {Object.keys(onlineUsers).map((userId) => (
+            <div className='contact' key={userId}>{onlineUsers[userId]}</div>
+          ))}
         </div>
-      )}
-    </div>
         <div className="chat-area">
-        <h2>Chat Area</h2>
-        <div className='messages'>
-        {/* Chat messages here */}
+          <h2>Chat Area</h2>
+          <div className='messages'>
+            {/* Chat messages here */}
+          </div>
+          <form onSubmit={sendMessage}>
+            <input type="text" name="message" placeholder="Type a message" required />
+            <button type="submit">Send</button>
+          </form>
         </div>
-        <form onSubmit={sendMessage}>
-          <input type="text" name="message" placeholder="Type a message" required />
-          <button type="submit">Send</button>
-        </form>
-      </div>
       </div>
     </div>
   );
